@@ -1,0 +1,98 @@
+html {
+	font: 15px lato, sans-serif;
+}
+
+body {
+	background-color: #292D3E;
+}
+
+.field {
+	margin-top: 100px;
+}
+
+table {
+ 	border-collapse: collapse;
+ 	margin: 0 auto;
+}
+table td {
+ 	border: 1px solid gray;
+ 	width: 50px;
+ 	height: 50px;
+ 	vertical-align: middle;
+ 	text-align: center;
+}
+
+table .caption {
+	font-size: 10px;
+	margin-top: -37px;
+}
+
+.token {
+	text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+table .token {
+	width: 50px;
+ 	height: 50px;
+ 	margin-top: -10px;
+	font-size: 30px;
+}
+
+.own {
+	color: #4c80ce;
+}
+
+.enemy {
+	color: #e8e55a;
+}
+
+.matchbox {
+	margin: 0 auto;
+	font-size: 15px;
+	text-align: center;
+}
+
+.matchbox .box {
+	margin: 50px 10px 0 10px;
+	display: inline-block;
+}
+
+.matchbox .headline {
+	display: inline-block;
+	margin-bottom: 10px;
+	color: gray;
+}
+
+.matchbox .box .turns {
+	margin: 15px 0 0 63px;
+}
+
+.matchbox .box .turns div {
+	display: inline-block;
+	text-align: left;
+}
+
+.matchbox .box .turns .turn {
+	display: block;
+}
+
+.matchbox .box .turns .turn .token {
+	width: 20px;
+ 	height: 20px;
+	font-size: 15px;
+}
+
+.matchbox .box .turns .turn .caption {
+	font-size: 8px;
+	margin-left: -13px;
+}
+
+.matchbox .box .turns .turn .symbol {
+	font-size: 15px;
+	margin-left: 10px;
+	color: gray;
+}
+
+.matchbox .box .turns .turn .forbidden {
+	color: red;
+}

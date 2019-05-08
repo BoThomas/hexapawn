@@ -1,6 +1,6 @@
 class Matchbox {
 
-    constructor(field, ownTokens, enemyTokens) {
+    constructor(board) {
         if(Matchbox.count == undefined){
             Matchbox.count = 1;
         }
@@ -8,33 +8,33 @@ class Matchbox {
         	Matchbox.count ++;
       	}
       	this.id = Matchbox.count;
-        this.field = $.extend(true, [], field); //array deep copy
-        this.ownTokens = ownTokens.map(a => Object.assign(new Token(), a)); //object deepy copy
-        this.enemyTokens = enemyTokens.map(a => Object.assign(new Token(), a)); //object deepy copy
+        this.boardSnapshot = board.cloneToJsonObject();
         this.validTurns = [];
-        this.calcValidTurns();
+        this.calcValidTurns();        
     }
 
     calcValidTurns() {
+    	let field = this.boardSnapshot.field;
+    	let ownTokens = this.boardSnapshot.ownTokens;
 
-        for (let i = 0; i < this.ownTokens.length; i++) {
+        for (let i = 0; i < ownTokens.length; i++) {
 
-            let token = this.ownTokens[i];
+            let token = ownTokens[i];
             let x = token.getX();
             let y = token.getY();
             
             //diagonallinks runter
-            if (x > 0 && (this.field[x-1][y+1] != null && !this.field[x-1][y+1].getOwn())) {
+            if (x > 0 && (field[x-1][y+1] != null && !field[x-1][y+1].getOwn())) {
                 this.validTurns.push(new Turn(token.getNumber(), x, y, x-1, y+1, "↙"));
             }
 
             //runter
-            if (this.field[x][y+1] == null) {
+            if (field[x][y+1] == null) {
                 this.validTurns.push(new Turn(token.getNumber(), x, y, x, y+1, "↓"));
             }
 
             //diaginalrechts runter
-            if (x < this.field.length-1 && (this.field[x+1][y+1] != null && !this.field[x+1][y+1].getOwn())) {
+            if (x < field.length-1 && (field[x+1][y+1] != null && !field[x+1][y+1].getOwn())) {
                 this.validTurns.push(new Turn(token.getNumber(), x, y, token.x+1, y+1, "↘"));
             }
         }
@@ -63,15 +63,15 @@ class Matchbox {
         div += "</div>"; //end box
         $(div).appendTo(matchbox);
 
-        Board.drawTo($("table.mbt"+this.id), this.field);
+        Board.drawTo($("table.mbt"+this.id), this.boardSnapshot.field);
     }
 
     getOwnTokens() {
-    	return this.ownTokens;
+    	return this.boardSnapshot.ownTokens;
     }
 
     getEnemyTokens() {
-    	return this.enemyTokens;
+    	return this.boardSnapshot.enemyTokens;
     }
 
 }

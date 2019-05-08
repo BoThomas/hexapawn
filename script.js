@@ -19,7 +19,7 @@ $(document).ready(function() {
 
 	//create new Matchbox
 	if (matchingBox == null) {
-		matchboxes.push(new Matchbox(board.getField(), board.getOwnTokens(), board.getEnemyTokens()));
+		matchboxes.push(new Matchbox(board));
 	}
 
 	//draw Matchboxes
@@ -36,7 +36,7 @@ $(document).ready(function() {
 	    	Board.drawTo($(".field table"), board.getField());
 	    	matchingBox = getMatchingBox();
 	    	if (matchingBox == null) {
-				matchboxes.push(new Matchbox(board.getField(), board.getOwnTokens(), board.getEnemyTokens()));
+				matchboxes.push(new Matchbox(board));
 			}
 			drawMatchboxes();
 		}

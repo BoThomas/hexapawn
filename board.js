@@ -87,7 +87,6 @@ class Board {
 	
 		let xMovement = token.getX() - x;
 		let yMovement = token.getY() - y;
-		console.log(xMovement, yMovement);
 		
 		if (token.getOwn()) { //spielt runter
 			if (yMovement != -1) return false; //Bewegung geht nicht genau ein Feld nach unten
@@ -113,4 +112,12 @@ class Board {
 		}
 		return true;
 	}
+
+    cloneToJsonObject () {
+        return {
+            "field": $.extend(true, [], this.field), //array deep copy
+            "ownTokens": this.ownTokens.map(a => Object.assign(new Token(), a)), //object-array deep copy
+            "enemyTokens": this.enemyTokens.map(a => Object.assign(new Token(), a))
+        }
+    }
 }

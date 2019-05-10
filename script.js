@@ -50,50 +50,12 @@ $(document).ready(function() {
 
 
 	function getMatchingBox() {
-		let matchingBox = null;
-
-		let ownTokens = board.getOwnTokens();
-		let enemyTokens = board.getEnemyTokens();
-
 		for (let m = 0; m < matchboxes.length; m++) { //all matchboxes
-			
-			let difference = false;
-			
-			for (let t = 0; t < ownTokens.length; t++) { //all current own tokens
-				let mt = matchboxes[m].getOwnTokens();
-				if (ownTokens.length != mt.length || !ownTokens[t].equals(mt[t])) {
-					difference = true;
-					break;
-				}
-				/*for (let i = 0; i < mt.length; i++) {
-					if (!mt[i].equals(ownTokens[t])) {
-						difference = true;
-						break;
-					}
-				}*/
-			}
-
-			for (let t = 0; t < enemyTokens.length; t++) { //all current enemy tokens
-				let mt = matchboxes[m].getEnemyTokens();
-				if (enemyTokens.length != mt.length || !enemyTokens[t].equals(mt[t])) {
-
-					difference = true;
-					break;
-				}
-				/*for (let i = 0; i < mt.length; i++) {
-					if (!mt[i].equals(enemyTokens[t])) {
-						difference = true;
-						break;
-					}
-				}*/
-			}
-			
-			if (!difference) {
-				matchingBox = matchboxes[m];
-				break;
+			if (board.equals(matchboxes[m].getBoardSnapshot())) {
+				return matchboxes[m];
 			}
 		}
-		return matchingBox;
+		return null;
 	}
 
 	function drawMatchboxes() {

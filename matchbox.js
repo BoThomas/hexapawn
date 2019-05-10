@@ -66,14 +66,9 @@ class Matchbox {
         Board.drawTo($("table.mbt"+this.id), this.boardSnapshot.field);
     }
 
-    getOwnTokens() {
-    	return this.boardSnapshot.ownTokens;
+    getBoardSnapshot() {
+        return this.boardSnapshot;
     }
-
-    getEnemyTokens() {
-    	return this.boardSnapshot.enemyTokens;
-    }
-
 }
 
 

@@ -113,11 +113,30 @@ class Board {
 		return true;
 	}
 
-    cloneToJsonObject () {
+    cloneToJsonObject() {
         return {
             "field": $.extend(true, [], this.field), //array deep copy
             "ownTokens": this.ownTokens.map(a => Object.assign(new Token(), a)), //object-array deep copy
             "enemyTokens": this.enemyTokens.map(a => Object.assign(new Token(), a))
         }
+    }
+
+    equals(board) {
+
+        let to_own = board.ownTokens;
+        let to_ene = board.enemyTokens;
+
+        //compare length of enemy and own tokens
+        if (this.ownTokens.length != to_own.length) return false;
+        if (this.enemyTokens.length != to_ene.length) return false;
+
+        //campare tokens (faster then comparing field)
+        for (let i = 0; i < this.ownTokens.length; i++) {
+            if (!this.ownTokens[i].equals(to_own[i])) return false;
+        }
+        for (let i = 0; i < this.enemyTokens.length; i++) {
+            if (!this.enemyTokens[i].equals(to_ene[i])) return false;
+        }
+        return true;
     }
 }

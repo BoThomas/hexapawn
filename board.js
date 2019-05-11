@@ -52,6 +52,10 @@ class Board {
     	return this.ownTokens;
     }
 
+    getOwnTokens() {
+        return this.ownTokens;
+    }
+
     getEnemyTokens() {
     	return this.enemyTokens;
     }

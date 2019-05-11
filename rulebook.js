@@ -47,6 +47,34 @@ class Rulebook {
         return validTurns;
 	}
 
+    static checkGameWon(board) {
+        //tokens dead
+        if (board.getOwnTokens().length == 0) return {"own": false, "reason": "Bot has no Tokens left."};
+        if (board.getEnemyTokens().length == 0) return {"own": true, "reason": "Human has no Tokens left."};
+
+        //player on endzone
+        let field = board.getField();
+        let yMax = field[0].length;
+        for (let x = 0; x < field.length; x++) {
+            if (field[x][0] != null && !field[x][0].isOwn()) {
+                return {"own": false, "reason": "Human reached endzone."};
+            }
+            if (field[x][yMax] != null && field[x][0].isOwn()) {
+                return {"own": true, "reason": "Bot reached endzone."};
+            }
+        }
+        
+        //player blocked
+        if (Rulebook.calcValidTurns(board, true).length == 0) {
+            return {"own": false, "reason": "Bot is blocked."};
+        }
+        if (Rulebook.calcValidTurns(board, false).length == 0) {
+            return {"own": true, "reason": "Human is blocked."};
+        }
+
+        return null;
+    }
+
     /*static isMoveValid(field, token, x, y) {
         let xMovement = token.getX() - x;
         let yMovement = token.getY() - y;

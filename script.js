@@ -2,21 +2,13 @@ $(document).ready(function() {
 	
 	const SIZE = 3;
 
-	let board = new Board(SIZE);
-	let matchboxes = [];
-	let selection = null; //save selected token
-	let matchingBox = null; //current matchbox
+	let board;
+	let matchboxes;
+	let selection; //save selected token
+	let matchingBox; //current matchbox
 
-	//create initial Tokens
-	for (let i = 0; i < SIZE; i++) {
-		board.createToken(0+i,0,true);
-		board.createToken(0+i,SIZE-1,false);
-	}
-
-	//draw board
+	initGame();
 	drawBoard();
-
-	//check if Matchbox exists/create it/draw it
 	updateMatchboxes();
 
 	//#########################
@@ -51,18 +43,33 @@ $(document).ready(function() {
 			board.moveToken(selection, x, y);
 			drawBoard();
 			updateMatchboxes();
-			selection = null;
-			doBotMove();
+			if (!checkWinCon()) {
+				selection = null;
+				doBotMove();
+			}
 		}
    	});
 
 
 	//#########################
 	
+	function initGame() {
+		board = new Board(SIZE);
+		matchboxes = [];
+		selection = null;
+		matchingBox = null;
+		//create initial Tokens
+		for (let i = 0; i < SIZE; i++) {
+			board.createToken(0+i,0,true);
+			board.createToken(0+i,SIZE-1,false);
+		}
+	}
+	
 	function drawBoard() {
 		Board.drawTo($(".field table"), board.getField());
 	}
 
+	//check if Matchbox exists/create it/draw it
 	function updateMatchboxes() {
 		matchingBox = getMatchingBox();
 		if (matchingBox == null) {
@@ -79,6 +86,14 @@ $(document).ready(function() {
 		board.moveToken(token, turn.getNewX(), turn.getNewY());
 		drawBoard();
 		updateMatchboxes();
+		checkWinCon();
+	}
+
+	function checkWinCon() {
+		let win = Rulebook.checkGameWon(board);
+		if (win == null) return false;
+		alert((win.own ? "Bot" : "Human") + " won the game! " + win.reason);
+		return true;
 	}
 
 	function getMatchingBox() {

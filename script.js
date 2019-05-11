@@ -4,6 +4,7 @@ $(document).ready(function() {
 
 	let board = new Board(SIZE);
 	let matchboxes = [];
+	let selection = null; //save selected token
 
 	//create initial Tokens
 	for (let i = 0; i < SIZE; i++) {
@@ -32,16 +33,37 @@ $(document).ready(function() {
 		let x = parseInt($(this).attr("x"));
 		let y = parseInt($(this).attr("y"));
 
-    	if (board.moveToken(board.getField(), board.getEnemyTokens()[0] /*TODO: nicht hardcoden*/, x, y)) {
-	    	Board.drawTo($(".field table"), board.getField());
-	    	matchingBox = getMatchingBox();
-	    	if (matchingBox == null) {
+		//### select ###
+		if (selection == null) {
+			let s = board.getTokenAt(x, y);
+			if (s != null && !s.isOwn()) {
+				selection = s;
+				$(this).addClass("selected");
+				let validTurns = Rulebook.calcValidTurns(board, false, selection);
+				for (let i = 0; i < validTurns.length; i++) {
+					let tdX = validTurns[i].getNewX();
+					let tdY = validTurns[i].getNewY();
+					let td = $(".field td[x='"+ tdX +"'][y='"+ tdY +"']");
+					td.addClass("valid");
+				}
+			}
+
+		//### deselect ###
+		} else if (selection.getX() == x && selection.getY() == y) {
+			$(".field td").removeClass("selected").removeClass("valid");
+			selection = null;
+
+		//### move ###
+		} else if ($(this).hasClass("valid")) {
+			board.moveToken(selection, x, y);
+			console.log(board);
+			Board.drawTo($(".field table"), board.getField());
+			matchingBox = getMatchingBox();
+    		if (matchingBox == null) {
 				matchboxes.push(new Matchbox(board));
 			}
 			drawMatchboxes();
-		}
-		else {
-			console.log("Error moving Token. Target-Field not allowed!");
+			selection = null;
 		}
    	});
 

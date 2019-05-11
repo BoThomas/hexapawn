@@ -4,10 +4,26 @@ html {
 
 body {
 	background-color: #292D3E;
+	-webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Chrome and Opera */
 }
 
 .field {
 	margin-top: 100px;
+	cursor: pointer;
+}
+
+.field table td.selected {
+	background-color: #404456;
+}
+
+.field table td.valid {
+	background-color: #2f6638;
+	opacity: 0.6;
 }
 
 table {
@@ -50,6 +66,7 @@ table .token {
 	margin: 0 auto;
 	font-size: 15px;
 	text-align: center;
+	cursor: default;
 }
 
 .matchbox .box {

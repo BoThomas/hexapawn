@@ -25,32 +25,30 @@ class Board {
     	return token;
     }
 
-    moveToken(field, token, x, y) {
-    	if (this.isMoveValid(field, token, x, y)) {
-	    	this.field[token.getX()][token.getY()] = null;
-	    	token.setX(x);
-	    	token.setY(y);
-	    	this.field[x][y] = token;
-	    	return true;
-	    }
-	    else {
-	    	return false;
-	    }
-    }
-
-    removeToken(token) {
+    moveToken(token, x, y) {
     	this.field[token.getX()][token.getY()] = null;
+    	token.setX(x);
+    	token.setY(y);
 
-    	let own = token.getOwn();
-    	if (own) {
-			delete this.ownTokens[token];
-    	}
-    	else {
-    		delete this.enemyTokens[token];
-    	}    	
+        if (this.field[x][y] != null) { //delete former Token
+            let oldToken = this.field[x][y];
+            if (oldToken.isOwn()) {
+                this.ownTokens.splice(this.ownTokens.indexOf(oldToken), 1);
+            }
+            else {
+                this.enemyTokens.splice(this.enemyTokens.indexOf(oldToken), 1);
+            }   
+        }
+
+    	this.field[x][y] = token;
+    	return true;
+    }   
+
+    getTokenAt(x, y) {
+        return this.field[x][y];
     }
 
-    getOwnTokens() {
+    isOwnTokens() {
     	return this.ownTokens;
     }
 
@@ -74,43 +72,13 @@ class Board {
     				tableData = '<td x="' + x + '" y="' + y + '"></td>'
     			}
     			else {
-    				tableData = '<td x="' + x + '" y="' + y + '"><div class="token ' + (token.getOwn() ? "own" : "enemy") + '">⬤</div><div class="caption">' + token.getNumber() + '</div></td>'; //◯
+    				tableData = '<td x="' + x + '" y="' + y + '"><div class="token ' + (token.isOwn() ? "own" : "enemy") + '">⬤</div><div class="caption">' + token.getNumber() + '</div></td>'; //◯
                 }    
                 row += tableData;			
     		}
     		row += "</tr>";
     		$(row).appendTo(table);
     	}
-	}
-
-	isMoveValid(field, token, x, y) {
-	
-		let xMovement = token.getX() - x;
-		let yMovement = token.getY() - y;
-		
-		if (token.getOwn()) { //spielt runter
-			if (yMovement != -1) return false; //Bewegung geht nicht genau ein Feld nach unten
-		}
-		else { //spielt hoch
-			if (yMovement != 1) return false; //Bewegung geht nicht genau ein Feld hoch
-		}
-
-		if (xMovement < -1 || xMovement > 1) return false; //Bewegung ist größer 1 nach rechts oder links
-
-		switch (xMovement) {
-			case -1: //diagonal rechts runten/hoch
-				if (token.getX() == field.length-1) return false; //linke Wand im Weg
-				if (field[x][y] == null || (token.getOwn() == field[x][y].getOwn())) return false; //kein Gegner oder eigener Spieler im Weg
-				break;
-			case 0:	//runter/hoch
-				if (field[x][y] != null) return false; //Feld nicht frei
-				break;
-			case 1:	//diagonal links runter/hoch
-				if (token.getX() == 0) return false; //rechte Wand im Weg
-				if (field[x][y] == null || (token.getOwn() == field[x][y].getOwn())) return false; //kein Gegner oder eigener Spieler im Weg
-				break;
-		}
-		return true;
 	}
 
     cloneToJsonObject() {
@@ -121,7 +89,7 @@ class Board {
         }
     }
 
-    equals(board) {
+    equals(board) { //board or board-snapshot
 
         let to_own = board.ownTokens;
         let to_ene = board.enemyTokens;

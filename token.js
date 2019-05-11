@@ -22,7 +22,7 @@ class Token {
     	return this.y;
     }
 
-    getOwn() {
+    isOwn() {
     	return this.own;
     }
 

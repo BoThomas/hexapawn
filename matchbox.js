@@ -9,8 +9,7 @@ class Matchbox {
       	}
       	this.id = Matchbox.count;
         this.boardSnapshot = board.cloneToJsonObject();
-        this.validTurns = [];
-        this.calcValidTurns();        
+        this.validTurns = Rulebook.calcValidTurns(this.boardSnapshot, true);
     }
 
     calcValidTurns() {
@@ -24,18 +23,18 @@ class Matchbox {
             let y = token.getY();
             
             //diagonallinks runter
-            if (x > 0 && (field[x-1][y+1] != null && !field[x-1][y+1].getOwn())) {
-                this.validTurns.push(new Turn(token.getNumber(), x, y, x-1, y+1, "↙"));
+            if (x > 0 && (field[x-1][y+1] != null && !field[x-1][y+1].isOwn())) {
+                this.validTurns.push(new Turn(token, x-1, y+1, "↙"));
             }
 
             //runter
             if (field[x][y+1] == null) {
-                this.validTurns.push(new Turn(token.getNumber(), x, y, x, y+1, "↓"));
+                this.validTurns.push(new Turn(token, x, y+1, "↓"));
             }
 
             //diaginalrechts runter
-            if (x < field.length-1 && (field[x+1][y+1] != null && !field[x+1][y+1].getOwn())) {
-                this.validTurns.push(new Turn(token.getNumber(), x, y, token.x+1, y+1, "↘"));
+            if (x < field.length-1 && (field[x+1][y+1] != null && !field[x+1][y+1].isOwn())) {
+                this.validTurns.push(new Turn(token, token.x+1, y+1, "↘"));
             }
         }
     }
@@ -71,45 +70,6 @@ class Matchbox {
     }
 }
 
-
-class Turn {
-
-    constructor(tokenNumber, cX, cY, nX, nY, symbol) {
-        this.currentPos = {
-            x: cX,
-            y: cY
-        };
-        this.newPos = {
-            x: nX,
-            y: nY
-        };
-        this.tokenNumber = tokenNumber;
-        this.symbol = symbol;
-        this.forbidden = false;
-    }
-
-    forbid() {
-        this.forbidden = true;
-    }
-
-    isForbidden() {
-        return this.forbidden;
-    }
-
-    getTokenNumber() {
-        return this.tokenNumber;
-    }
-
-    getSymbol() {
-        return this.symbol;
-    }
-}
-
 //zufällig eine Aktion auswählen
 
 //zuletzt gewählte Aktion entfernen (falls es nicht die einzig verfügbare war)
-
-
-//alle zustände durchgehen
-    //ist passend zu aktuellem zustand?
-//wenn keine passt -> neue matchbox

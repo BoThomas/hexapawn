@@ -12,36 +12,18 @@ class Matchbox {
         this.validTurns = Rulebook.calcValidTurns(this.boardSnapshot, true);
     }
 
-    calcValidTurns() {
-    	let field = this.boardSnapshot.field;
-    	let ownTokens = this.boardSnapshot.ownTokens;
-
-        for (let i = 0; i < ownTokens.length; i++) {
-
-            let token = ownTokens[i];
-            let x = token.getX();
-            let y = token.getY();
-            
-            //diagonallinks runter
-            if (x > 0 && (field[x-1][y+1] != null && !field[x-1][y+1].isOwn())) {
-                this.validTurns.push(new Turn(token, x-1, y+1, "↙"));
-            }
-
-            //runter
-            if (field[x][y+1] == null) {
-                this.validTurns.push(new Turn(token, x, y+1, "↓"));
-            }
-
-            //diaginalrechts runter
-            if (x < field.length-1 && (field[x+1][y+1] != null && !field[x+1][y+1].isOwn())) {
-                this.validTurns.push(new Turn(token, token.x+1, y+1, "↘"));
-            }
+    getTurn() {
+        let allowedValidTurns = [];
+        for (let i = 0; i < this.validTurns.length; i++) {
+            if (!this.validTurns[i].isForbidden()) allowedValidTurns.push(this.validTurns[i]);
+        }
+        if (allowedValidTurns.length == 0) {
+            return null;
+        }
+        else {
+            return allowedValidTurns[Math.floor(Math.random() * allowedValidTurns.length)];
         }
     }
-
-    /*getTurn() {
-        Math.floor(Math.random() * field.length)
-    }*/
 
     getValidTurns() {
         return this.validTurns;

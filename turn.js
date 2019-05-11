@@ -14,6 +14,14 @@ class Turn {
         this.forbidden = false;
     }
 
+    getCurrentX() {
+        return this.currentPos.x;
+    }
+
+    getCurrentY() {
+        return this.currentPos.y;
+    }
+
     getNewX() {
         return this.newPos.x;
     }

@@ -5,6 +5,7 @@ $(document).ready(function() {
 	let board = new Board(SIZE);
 	let matchboxes = [];
 	let selection = null; //save selected token
+	let matchingBox = null; //current matchbox
 
 	//create initial Tokens
 	for (let i = 0; i < SIZE; i++) {
@@ -13,18 +14,10 @@ $(document).ready(function() {
 	}
 
 	//draw board
-	Board.drawTo($(".field table"), board.getField());
+	drawBoard();
 
-	//check if Matchbox for the current board-situation exists
-	let matchingBox = getMatchingBox();
-
-	//create new Matchbox
-	if (matchingBox == null) {
-		matchboxes.push(new Matchbox(board));
-	}
-
-	//draw Matchboxes
-	drawMatchboxes();
+	//check if Matchbox exists/create it/draw it
+	updateMatchboxes();
 
 	//#########################
 	
@@ -56,20 +49,37 @@ $(document).ready(function() {
 		//### move ###
 		} else if ($(this).hasClass("valid")) {
 			board.moveToken(selection, x, y);
-			console.log(board);
-			Board.drawTo($(".field table"), board.getField());
-			matchingBox = getMatchingBox();
-    		if (matchingBox == null) {
-				matchboxes.push(new Matchbox(board));
-			}
-			drawMatchboxes();
+			drawBoard();
+			updateMatchboxes();
 			selection = null;
+			doBotMove();
 		}
    	});
 
 
 	//#########################
+	
+	function drawBoard() {
+		Board.drawTo($(".field table"), board.getField());
+	}
 
+	function updateMatchboxes() {
+		matchingBox = getMatchingBox();
+		if (matchingBox == null) {
+			matchingBox = new Matchbox(board);
+			matchboxes.push(matchingBox);
+		}
+		drawMatchboxes();
+	}
+
+	function doBotMove() {
+		let turn = matchingBox.getTurn();
+		if (turn == null) return; //no turn available
+		let token = board.getTokenAt(turn.getCurrentX(), turn.getCurrentY());
+		board.moveToken(token, turn.getNewX(), turn.getNewY());
+		drawBoard();
+		updateMatchboxes();
+	}
 
 	function getMatchingBox() {
 		for (let m = 0; m < matchboxes.length; m++) { //all matchboxes

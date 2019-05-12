@@ -3,17 +3,20 @@ $(document).ready(function() {
 	const SIZE = 3;
 
 	let board;
-	let matchboxes;
+	let matchboxes = [];
+	let gameRunning;
+	let currentTurnOwn;
 	let selection; //save selected token
 	let matchingBox; //current matchbox
 
 	initGame();
-	drawBoard();
 	updateMatchboxes();
 
 	//#########################
 	
 	$(".field").on("click", "td", function() {
+
+		if (!gameRunning) return;
 
 		let x = parseInt($(this).attr("x"));
 		let y = parseInt($(this).attr("y"));
@@ -44,18 +47,24 @@ $(document).ready(function() {
 			drawBoard();
 			updateMatchboxes();
 			if (!checkWinCon()) {
-				selection = null;
+				selection = null;				
 				doBotMove();
 			}
 		}
+   	});
+
+   	$(".field .restart").on("click", function() {
+   		initGame();
    	});
 
 
 	//#########################
 	
 	function initGame() {
+		$(".field .state").html("Game in progess!");
+		gameRunning = true;
+		currentTurnOwn = false;
 		board = new Board(SIZE);
-		matchboxes = [];
 		selection = null;
 		matchingBox = null;
 		//create initial Tokens
@@ -63,6 +72,7 @@ $(document).ready(function() {
 			board.createToken(0+i,0,true);
 			board.createToken(0+i,SIZE-1,false);
 		}
+		drawBoard();
 	}
 	
 	function drawBoard() {
@@ -80,6 +90,7 @@ $(document).ready(function() {
 	}
 
 	function doBotMove() {
+		currentTurnOwn = true;
 		let turn = matchingBox.getTurn();
 		if (turn == null) return; //no turn available
 		let token = board.getTokenAt(turn.getCurrentX(), turn.getCurrentY());
@@ -87,12 +98,23 @@ $(document).ready(function() {
 		drawBoard();
 		updateMatchboxes();
 		checkWinCon();
+		currentTurnOwn = false;
 	}
 
 	function checkWinCon() {
-		let win = Rulebook.checkGameWon(board);
+		let win = Rulebook.checkGameWon(board, currentTurnOwn);
 		if (win == null) return false;
-		alert((win.own ? "Bot" : "Human") + " won the game! " + win.reason);
+
+		gameRunning = false;
+		$(".field .state").html((win.own ? "Bot" : "Human") + " won the game! " + win.reason);
+		let history = $(".field .history");
+		if (history.html() == "") {
+			history.append(win.own ? "B" : "H");
+		}
+		else {
+			history.append(win.own ? ", B" : ", H");
+		}
+		$(".field .restart").css("display", "inline-block");
 		return true;
 	}
 

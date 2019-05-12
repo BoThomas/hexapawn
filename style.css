@@ -14,6 +14,37 @@ body {
 
 .field {
 	margin-top: 100px;
+}
+
+.field .info {
+	color: lightgray;
+	width: 60%;
+	margin: 0 auto 50px auto;
+	text-align: center;
+}
+
+.field .info h2 {
+	font-size: 1.3em;
+	margin-bottom: 10px;
+}
+
+.field .info .state {
+	margin-bottom: 5px;
+	display: inline-block;
+}
+
+.field .info .restart {
+	cursor: pointer;
+	display: none;
+	margin-left: 5px;
+	color: #dda413;
+}
+
+.field .info .history {
+	font-size: 0.8em;
+}
+
+.field table {
 	cursor: pointer;
 }
 

@@ -47,7 +47,7 @@ class Rulebook {
         return validTurns;
 	}
 
-    static checkGameWon(board) {
+    static checkGameWon(board, lastTurnOwn) {
         //tokens dead
         if (board.getOwnTokens().length == 0) return {"own": false, "reason": "Bot has no Tokens left."};
         if (board.getEnemyTokens().length == 0) return {"own": true, "reason": "Human has no Tokens left."};
@@ -65,10 +65,10 @@ class Rulebook {
         }
         
         //player blocked
-        if (Rulebook.calcValidTurns(board, true).length == 0) {
+        if (!lastTurnOwn && Rulebook.calcValidTurns(board, true).length == 0) {
             return {"own": false, "reason": "Bot is blocked."};
         }
-        if (Rulebook.calcValidTurns(board, false).length == 0) {
+        if (lastTurnOwn && Rulebook.calcValidTurns(board, false).length == 0) {
             return {"own": true, "reason": "Human is blocked."};
         }
 

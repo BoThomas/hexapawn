@@ -54,12 +54,12 @@ class Rulebook {
 
         //player on endzone
         let field = board.getField();
-        let yMax = field[0].length;
+        let yMax = field[0].length-1;
         for (let x = 0; x < field.length; x++) {
             if (field[x][0] != null && !field[x][0].isOwn()) {
                 return {"own": false, "reason": "Human reached endzone."};
             }
-            if (field[x][yMax] != null && field[x][0].isOwn()) {
+            if (field[x][yMax] != null && field[x][yMax].isOwn()) {
                 return {"own": true, "reason": "Bot reached endzone."};
             }
         }

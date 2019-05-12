@@ -37,7 +37,6 @@ class Matchbox {
         div += '<div class="turns">' //start turns
         for (let i = 0; i < this.validTurns.length; i++) {
             let vt = this.validTurns[i];
-
             div += '<div class="turn"><div class="token own">⬤</div><div class="caption">' + vt.getTokenNumber() + '</div><div class="symbol ' + (vt.isForbidden() ? "forbidden" : "") + '">' + vt.getSymbol() + '</div></div>';
         }
         div += "</div>"; //end turns

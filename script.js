@@ -6,6 +6,7 @@ $(document).ready(function() {
 	let matchboxes = [];
 	let gameRunning;
 	let currentTurnOwn;
+	let lastBotTurn = null;
 	let selection; //save selected token
 	let matchingBox; //current matchbox
 
@@ -45,9 +46,9 @@ $(document).ready(function() {
 		} else if ($(this).hasClass("valid")) {
 			board.moveToken(selection, x, y);
 			drawBoard();
-			updateMatchboxes();
-			if (!checkWinCon()) {
-				selection = null;				
+			if (!checkWinCon()) {				
+				selection = null;
+				updateMatchboxes();	
 				doBotMove();
 			}
 		}
@@ -62,6 +63,7 @@ $(document).ready(function() {
 	
 	function initGame() {
 		$(".field .state").html("Game in progess!");
+		$(".field .restart").hide();
 		gameRunning = true;
 		currentTurnOwn = false;
 		board = new Board(SIZE);
@@ -92,12 +94,17 @@ $(document).ready(function() {
 	function doBotMove() {
 		currentTurnOwn = true;
 		let turn = matchingBox.getTurn();
-		if (turn == null) return; //no turn available
+		if (turn == null) { //no turn available
+			console.log("Bot cant move. No valid and allowed turn left!")
+			return; 
+		}
+		lastBotTurn = turn;
 		let token = board.getTokenAt(turn.getCurrentX(), turn.getCurrentY());
 		board.moveToken(token, turn.getNewX(), turn.getNewY());
 		drawBoard();
-		updateMatchboxes();
-		checkWinCon();
+		if (!checkWinCon()) {
+			updateMatchboxes();
+		}		
 		currentTurnOwn = false;
 	}
 
@@ -115,6 +122,11 @@ $(document).ready(function() {
 			history.append(win.own ? ", B" : ", H");
 		}
 		$(".field .restart").css("display", "inline-block");
+
+		if (!win.own) {
+			lastBotTurn.forbid();
+			drawMatchboxes();
+		}
 		return true;
 	}
 

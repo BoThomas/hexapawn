@@ -103,6 +103,8 @@ table .token {
 .matchbox .box {
 	margin: 50px 10px 0 10px;
 	display: inline-block;
+	vertical-align: top;
+	height: 260px;
 }
 
 .matchbox .headline {

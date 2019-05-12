@@ -11,7 +11,7 @@ $(document).ready(function() {
 	let matchingBox; //current matchbox
 
 	initGame();
-	updateMatchboxes();
+	//updateMatchboxes();
 
 	//#########################
 	
@@ -103,7 +103,7 @@ $(document).ready(function() {
 		board.moveToken(token, turn.getNewX(), turn.getNewY());
 		drawBoard();
 		if (!checkWinCon()) {
-			updateMatchboxes();
+			//updateMatchboxes();
 		}		
 		currentTurnOwn = false;
 	}

@@ -28,19 +28,19 @@ class Rulebook {
             
             //diagonallinks runter/hoch
             if (x > 0 && field[x-1][y+delta] != null && own != field[x-1][y+delta].isOwn()) {
-                symbol = own ? "↙" : "↖";
+                symbol = own ? "down_left" : "up_left";
                 validTurns.push(new Turn(tokens[i], x-1, y+delta, symbol));
             }
 
             //gerade runter/hoch
             if (field[x][y+delta] == null) {
-                symbol = own ? "↓" : "↑";
+                symbol = own ? "down" : "up";
                 validTurns.push(new Turn(tokens[i], x, y+delta, symbol));
             }
 
             //diaginalrechts runter/hoch
             if (x < field.length-1 && field[x+1][y+delta] != null && own != field[x+1][y+delta].isOwn()) {
-                symbol = own ? "↘" : "↗";
+                symbol = own ? "down_right" : "up_right";
                 validTurns.push(new Turn(tokens[i], tokens[i].x+1, y+delta, symbol));
             }
         }

@@ -138,9 +138,17 @@ table .token {
 }
 
 .matchbox .box .turns .turn .symbol {
-	font-size: 15px;
+	/*font-size: 15px;*/
 	margin-left: 10px;
-	color: gray;
+	/*color: gray;*/
+
+}
+
+.matchbox .box .turns .turn .symbol img {
+	height: 10px;
+	
+	-webkit-filter: grayscale(100%) brightness(500%) brightness(50%);
+  	filter: grayscale(100%) brightness(500%) brightness(50%);
 }
 
 .matchbox .box .turns .turn .forbidden {
